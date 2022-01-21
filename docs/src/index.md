@@ -23,7 +23,7 @@ CPstring
 ```
 
 ```@docs
-PString
+Pstring
 ```
 
 ```@docs

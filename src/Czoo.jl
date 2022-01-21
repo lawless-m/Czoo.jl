@@ -128,10 +128,10 @@ struct LinkedPstring
 end
 
 """
-    add_int(a, b)
+    add(a, b)
 Calls C to adds two Ints and returns the result
 """
-add_int(a, b) = @ccall LIB.add(a::Int, b::Int)::Int
+add(a, b) = @ccall LIB.add(a::Int, b::Int)::Int
 
 """
     concat(a, b)
