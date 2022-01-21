@@ -2,7 +2,7 @@ module Czoo
 
 const LIB="src/libczoo"
 
-export free_ptr, add, concat, cons, CPstring, PString, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
+export free_ptr, add_int, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
 
 """
     free_ptr(ptr; free=true)  
@@ -134,16 +134,16 @@ Calls C to adds two Ints and returns the result
 add_int(a, b) = @ccall LIB.add(a::Int, b::Int)::Int
 
 """
-    concat_string(a, b)
+    concat(a, b)
 Calls C to concat two Strings and returns the result (and frees the memory)
 """
-concat_string(a, b) = (@ccall LIB.concat(a::Cstring, b::Cstring)::Ptr{Cuchar}) |> string_from_ptr_uchar
+concat(a, b) = (@ccall LIB.concat(a::Cstring, b::Cstring)::Ptr{Cuchar}) |> string_from_ptr_uchar
 
 """
-    cons_string(a, b)
+    cons(a, b)
 Calls C to create a list of two Strings and returns the result as a Vector{String} (and frees the memory)
 """
-cons_string(a, b) = (@ccall LIB.cons(a::Cstring, b::Cstring)::Ptr{Ptr{Cuchar}}) |> vec_string_from_ptr_ptr_uchar
+cons(a, b) = (@ccall LIB.cons(a::Cstring, b::Cstring)::Ptr{Ptr{Cuchar}}) |> vec_string_from_ptr_ptr_uchar
 
 """
     pstring(a)
