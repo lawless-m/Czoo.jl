@@ -2,7 +2,6 @@ using Documenter
 using Czoo
 using Dates
 
-
 makedocs(
     modules = [Czoo],
     sitename="Czoo.jl", 
