@@ -1,0 +1,13 @@
+name = "Czoo"
+uuid = "e0b26a8c-06f5-483b-b801-6ff31b7e7ec0"
+authors = ["Matt Lawless"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+julia = "1"
+
+[targets]
+test = ["Test"]
