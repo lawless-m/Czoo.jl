@@ -2,7 +2,7 @@ module Czoo
 
 const LIB="src/libczoo"
 
-export free_ptr, add_int, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
+export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
 
 """
     free_ptr(ptr; free=true)  
@@ -163,4 +163,5 @@ Calls C to create a Ptr{CLinkedPstring} struct and returns a LinkedPString (and 
 """
 linked_pstrings(a, b, c) = LinkedPstring((@ccall LIB.linked_pstrings(a::Cstring, b::Cstring, c::Cstring)::Ptr{CLinkedPstring}))
 
+###
 end
