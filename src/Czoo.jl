@@ -163,5 +163,56 @@ Calls C to create a Ptr{CLinkedPstring} struct and returns a LinkedPString (and 
 """
 linked_pstrings(a, b, c) = LinkedPstring((@ccall LIB.linked_pstrings(a::Cstring, b::Cstring, c::Cstring)::Ptr{CLinkedPstring}))
 
+#==
+"""
+    arity0_func()
+A function without arguments or return type to send to C to call
+"""
+arity0_func() = println("J: Airty0 function")
+
+"""
+    send_arity0_func()
+Create a pointer to a Julia function which takes no arguments and returns nothing.
+Call a function C which will, in turn, call that Julia function.
+"""
+function send_arity0_func()
+    jfunc = @cfunction(airity0_func)
+    @ccall LIB.call_arity0_julia_func(jfunc::Ptr{Cvoid})::Ptr{Cvoid}
+end
+
+"""
+    airity1_func(i::Cint)
+An airity1 function for C to call with a C Int, it just prints it.
+"""
+airity1_func(i::Cint) = prinlnt("J: C called with $i")
+
+"""
+    send_airity1_int(i::Cint)
+Create a pointer to a Julia function which takes a C Integer but returns nothing.
+Call a function C which will, in turn, call that Julia function.
+"""
+function send_airity1_int(i::Cint)
+    jfunc = @cfunction(airity1_func)
+    @ccall LIB.call_airity1_julia_func(jfunc::Ptr{Cvoid})::Ptr{Cvoid}
+end
+
+"""
+    airity2_func(a::Cint, b::Cint)::Cint
+Call this function with two Cint arguments and get a Cint in return
+"""
+    airity2_func(a::Cint, b::Cint)::Cint = begin println("J: called with $a $b, returning $(a+b)"); a+b; end
+
+"""
+    send_airity2_func()
+"""
+function send_airity2_func()
+    jfunc = @cfunction(airity2func)
+    i = @ccall LIB.call_airity2_julia_func(jfunc::Ptr{Cvoid})::Cint
+    println("J: Called C, got back $i")
+end
+
+==#
+
+
 ###
 end
