@@ -76,3 +76,34 @@ linked_pstrings(const char* a, const char* b, const char* c) {
 
     return ps1;
 }
+
+/*
+
+prep work
+
+void
+call_arity0_julia_func(void *jfun_ptr) {
+    printf("C: call_arity0_julia_func() no return\n");
+    (*jfun_ptr)();
+}
+
+void
+call_airity1_julia_func(void *jfun_ptr(int)) {
+    printf("C: call_airity1_julia_func(int) no return\n", jfun_ptr);
+    (*jfun_ptr)(17);
+}
+
+int
+call_airity2_julia_func(void (*fun_ptr)(int, int)) {
+    printf("C: call_airity2_julia_func(int, int) return int\n", jfun_ptr);
+
+    int i = fun_ptr(17, 19);
+    
+    printf("C: called with (17, 19) returning %d\n", i);
+    return i;
+};
+
+*/
+
+
+
