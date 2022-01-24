@@ -2,15 +2,9 @@ module Czoo
 
 const LIB="src/libczoo"
 
-<<<<<<< HEAD
-
-export free_ptr, add_int, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
-export print_list_int, print_Pstruct, Pstruct
-=======
 export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
->>>>>>> 07126bc3dd227a118658c1e617667655fa348a6d
+export print_list_int, print_Pstruct, Pstruct
 
-"""
     free_ptr(ptr; free=true)  
 Free the given ptr if not C_NULL.
 # Arguments
