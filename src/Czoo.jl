@@ -5,13 +5,14 @@ const LIB="src/libczoo"
 export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
 export print_list_int, print_Pstruct, Pstruct
 
+"""
     free_ptr(ptr; free=true)  
-Free the given ptr if not C_NULL.
+Free the given C ptr in C.
 # Arguments
 - `ptr` the C pointer to be freed
 - `free` a conditional flag to prevent an `if` at the call site
 """
-free_ptr(ptr; free=true) = if free && ptr != C_NULL ccall(:free, Cvoid, (Ptr{Cvoid},), Ptr{Cvoid}(ptr)) end
+free_ptr(ptr; free=true) = if free ccall(:free, Cvoid, (Ptr{Cvoid},), Ptr{Cvoid}(ptr)) end
 
 """
     string_from_ptr_uchar(ptr_uchar; free=true)
@@ -126,7 +127,11 @@ struct LinkedPstring
         free_ptr(pclp; free)
         lp
     end
+    LinkedPstring(s::AbstractString) = new(nothing, length(s), s)
+    LinkedPstring(lp, s::AbstractString) = new(lp, length(s), s)
 end
+
+Base.isequal(lp1::LinkedPstring, lp2::LinkedPstring) = isequal(lp1.next, lp2.next) && lp1.length == lp2.length && lp1.uchars == lp2.uchars
 
 """
     add(a, b)
@@ -169,10 +174,14 @@ linked_pstrings(a, b, c) = LinkedPstring((@ccall LIB.linked_pstrings(a::Cstring,
     print_list_ints(ints::Vector{Cint})
 Calls C to print a list of Ints
 """
-print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, length(ints)::Cint)::Cvoid
+print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, length(ints)::Cint)::Cint
 
-print_Pstring(ps::Pstring) = @ccall LIB.print_Pstring(ps::Pstring)::Cvoid 
+#==
+not right
+print_Pstring(ps::Pstring) = @ccall LIB.print_Pstring(ps::Pstring)::Cint 
+==#
 
+#== These don't work yet
 
 """
     arity0_func()
@@ -186,7 +195,7 @@ Create a pointer to a Julia function which takes no arguments and returns nothin
 Call a function C which will, in turn, call that Julia function.
 """
 function send_arity0_func()
-    jfunc = @cfunction(airity0_func)
+    jfunc = @cfunction(arity0_func, Ptr{Cvoid}, (Cvoid,))
     @ccall LIB.call_arity0_julia_func(jfunc::Ptr{Cvoid})::Ptr{Cvoid}
 end
 
@@ -202,7 +211,7 @@ Create a pointer to a Julia function which takes a C Integer but returns nothing
 Call a function C which will, in turn, call that Julia function.
 """
 function send_airity1_int(i::Cint)
-    jfunc = @cfunction(airity1_func)
+    jfunc = @cfunction(airity1_func, Cvoid, (Cvoid,))
     @ccall LIB.call_airity1_julia_func(jfunc::Ptr{Cvoid})::Ptr{Cvoid}
 end
 
@@ -216,12 +225,12 @@ Call this function with two Cint arguments and get a Cint in return
     send_airity2_func()
 """
 function send_airity2_func()
-    jfunc = @cfunction(airity2func)
+    jfunc = @cfunction(airity2_func, Cint, (Cint, Cint))
     i = @ccall LIB.call_airity2_julia_func(jfunc::Ptr{Cvoid})::Cint
     println("J: Called C, got back $i")
 end
 
-
+==#
 
 
 ###

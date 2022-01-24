@@ -77,29 +77,30 @@ linked_pstrings(const char* a, const char* b, const char* c) {
     return ps1;
 }
 
-void
+int
 print_list_int(const int* ints, int nints) {
     printf("C: print_list_int nints=%d\n", nints);
+    int k = 0;
     for (int i = 0; i < nints; i++) {
-        printf("\t%d => %d\n", i, ints[i]);
+        k += printf("\t%d => %d\n", i, ints[i]);
     }
+    return k;
 }
 
-void
+int
 print_Pstring(const Pstring p) {
     printf("C: print_Pstring\n");
-    printf("\tlength: %d\n\t%s", p.length, p.uchars);
+    return printf("\tlength: %d\n\tString \"%s\"", p.length, p.uchars);
 }
 
 /*
-
-prep work
 
 void
 call_arity0_julia_func(void *jfun_ptr) {
     printf("C: call_arity0_julia_func() no return\n");
     (*jfun_ptr)();
 }
+
 
 void
 call_airity1_julia_func(void *jfun_ptr(int)) {
@@ -118,6 +119,5 @@ call_airity2_julia_func(void (*fun_ptr)(int, int)) {
 };
 
 */
-
 
 
