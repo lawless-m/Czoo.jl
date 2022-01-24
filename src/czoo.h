@@ -25,3 +25,9 @@ typedef struct {
 
 extern LinkedPstring *
 linked_pstrings(const char* a, const char* b, const char* c);
+
+extern void
+print_list_int(const int* ints, int nints);
+
+extern void
+print_Pstring(const Pstring p);

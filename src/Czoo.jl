@@ -2,7 +2,9 @@ module Czoo
 
 const LIB="src/libczoo"
 
+
 export free_ptr, add_int, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
+export print_list_int, print_Pstruct, Pstruct
 
 """
     free_ptr(ptr; free=true)  
@@ -79,6 +81,7 @@ The Julia version of the `CPstring`
 struct Pstring
     length::Int
     uchars::String
+    Pstring(s::String) = new(length(s), s)
     Pstring(cp::CPstring; free=true) = new(Int(cp.length), string_from_ptr_uchar(cp.uchars; free)) 
     function Pstring(pcp::Ptr{CPstring}; free=true)
         if pcp == C_NULL
@@ -163,4 +166,15 @@ Calls C to create a Ptr{CLinkedPstring} struct and returns a LinkedPString (and 
 """
 linked_pstrings(a, b, c) = LinkedPstring((@ccall LIB.linked_pstrings(a::Cstring, b::Cstring, c::Cstring)::Ptr{CLinkedPstring}))
 
+
+"""
+    print_list_ints(ints::Vector{Cint})
+Calls C to print a list of Ints
+"""
+print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, length(ints)::Cint)::Cvoid
+
+print_Pstring(ps::Pstring) = @ccall LIB.print_Pstring(ps::Pstring)::Cvoid 
+
+
+### 
 end

@@ -76,3 +76,18 @@ linked_pstrings(const char* a, const char* b, const char* c) {
 
     return ps1;
 }
+
+void
+print_list_int(const int* ints, int nints) {
+    printf("C: print_list_int nints=%d\n", nints);
+    for (int i = 0; i < nints; i++) {
+        printf("\t%d => %d\n", i, ints[i]);
+    }
+}
+
+void
+print_Pstring(const Pstring p) {
+    printf("C: print_Pstring\n");
+    printf("\tlength: %d\n\t%s", p.length, p.uchars);
+}
+
