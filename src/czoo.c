@@ -6,6 +6,7 @@
 unsigned int 
 add(unsigned int a, unsigned int b) {
     printf("C: add(%d, %d)\n", a, b);
+    fflush(stdout);
     return (a+b);
 }
 
@@ -16,6 +17,7 @@ concat(const char *a, const char *b) {
     char *text = (char*)calloc(strlen(a) + strlen(b) + 1, 1);
     strcpy(text, a);
     strcpy(text + strlen(a), b);
+    fflush(stdout);
     return text;
 }
 
@@ -28,6 +30,7 @@ cons(const char *a, const char *b) {
     list[1] = calloc(strlen(b)+1, 1);
     strcpy(list[0], a);
     strcpy(list[1], b);
+    fflush(stdout);
     return list;
 }
 
@@ -38,6 +41,7 @@ pstring(const char* a) {
     ps.length = strlen(a);
     ps.uchars = (char *)calloc(strlen(a)+1, 1);
     strcpy(ps.uchars, a);
+    fflush(stdout);
     return ps;
 }
 
@@ -48,6 +52,7 @@ ptr_pstring(const char* a) {
     ps->length = strlen(a);
     ps->uchars = (char *)calloc(strlen(a)+1, 1);
     strcpy(ps->uchars, a);
+    fflush(stdout);
     return ps;
 }
 
@@ -73,6 +78,7 @@ linked_pstrings(const char* a, const char* b, const char* c) {
     ps3->length = strlen(c);
     ps3->uchars = (char *)calloc(strlen(c)+1, 1);
     strcpy(ps3->uchars, c);
+    fflush(stdout);
 
     return ps1;
 }
@@ -84,13 +90,17 @@ print_list_int(const int* ints, int nints) {
     for (int i = 0; i < nints; i++) {
         k += printf("\t%d => %d\n", i, ints[i]);
     }
+    fflush(stdout);
     return k;
 }
 
 int
 print_Pstring(const Pstring p) {
+    int i;
     printf("C: print_Pstring\n");
-    return printf("\tlength: %d\n\tString \"%s\"", p.length, p.uchars);
+    i = printf("C: \tlength: %d\nC:\tstrlen: %ld\nC:\tuchars \"%s\"\n", p.length, strlen(p.uchars), p.uchars);
+    fflush(stdout);
+    return i;
 }
 
 /*
@@ -98,6 +108,7 @@ print_Pstring(const Pstring p) {
 void
 call_arity0_julia_func(void *jfun_ptr) {
     printf("C: call_arity0_julia_func() no return\n");
+    fflush(stdout);
     (*jfun_ptr)();
 }
 
@@ -105,6 +116,7 @@ call_arity0_julia_func(void *jfun_ptr) {
 void
 call_airity1_julia_func(void *jfun_ptr(int)) {
     printf("C: call_airity1_julia_func(int) no return\n", jfun_ptr);
+    fflush(stdout);
     (*jfun_ptr)(17);
 }
 
@@ -115,6 +127,7 @@ call_airity2_julia_func(void (*fun_ptr)(int, int)) {
     int i = fun_ptr(17, 19);
     
     printf("C: called with (17, 19) returning %d\n", i);
+    fflush(stdout);
     return i;
 };
 

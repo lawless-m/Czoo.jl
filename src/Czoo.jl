@@ -3,7 +3,7 @@ module Czoo
 const LIB="src/libczoo"
 
 export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
-export print_list_int, print_Pstruct, Pstruct
+export print_list_int, print_Pstruct, Pstruct, print_Pstring_as_Cstring
 
 """
     free_ptr(ptr; free=true)  
@@ -176,10 +176,10 @@ Calls C to print a list of Ints
 """
 print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, length(ints)::Cint)::Cint
 
-#==
-not right
-print_Pstring(ps::Pstring) = @ccall LIB.print_Pstring(ps::Pstring)::Cint 
-==#
+function print_Pstring_as_Cstring(ps::Pstring)
+    cp = CPstring(ps.length, pointer(ps.uchars))
+    @ccall LIB.print_Pstring(cp::CPstring)::Cint 
+end
 
 #== These don't work yet
 
