@@ -45,3 +45,11 @@ LinkedPstring
 ```@docs
 linked_pstrings
 ``` 
+
+```@docs
+print_Pstring_as_Cstring
+```
+
+```@docs
+capture_c_stdout
+```

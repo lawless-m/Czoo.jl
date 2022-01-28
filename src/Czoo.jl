@@ -3,7 +3,7 @@ module Czoo
 const LIB="src/libczoo"
 
 export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
-export print_list_int, print_Pstruct, Pstruct, print_Pstring_as_Cstring
+export print_list_int, print_Pstruct, Pstruct, print_Pstring_as_Cstring, capture_c_stdout
 
 """
     free_ptr(ptr; free=true)  
@@ -176,12 +176,32 @@ Calls C to print a list of Ints
 """
 print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, length(ints)::Cint)::Cint
 
+"""
+    print_Pstring_as_Cstring(ps::Pstring)
+Send a Pstring Julia struct as a converted Cstring struct. I imagine there is a way to do this witout the conversion.
+"""
 function print_Pstring_as_Cstring(ps::Pstring)
     cp = CPstring(ps.length, pointer(ps.uchars))
     @ccall LIB.print_Pstring(cp::CPstring)::Cint 
 end
 
-#== These don't work yet
+"""
+    capture_c_stdout()
+Redirect stdout of the C program to a file and print it in Julia. Unfortunately IOBuffer() cannot be used, it requires an actual file.
+"""
+function capture_c_stdout(c::Cint)
+    (path, io) = mktemp() # Julia will delete this on exit
+    redirect_stdout(io) do
+        ccall(:putchar, Cint, (Cint,), c)
+        Base.Libc.flush_cstdio() # required or it sits in the buffer - even between invocations
+    end
+    seekstart(io)
+    c = "Captured: $(String(read(io)))"
+    println(c)
+    c
+end
+
+#== These don't work yet / are untested
 
 """
     arity0_func()
