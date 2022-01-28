@@ -178,7 +178,7 @@ print_list_int(ints::Vector{Cint}) = @ccall LIB.print_list_int(ints::Ptr{Cint}, 
 
 """
     print_Pstring_as_Cstring(ps::Pstring)
-Send a Pstring Julia struct as a converted Cstring struct. I imagine there is a way to do this witout the conversion.
+Send a Pstring Julia struct as a converted Cstring struct. I imagine there is a way to do this without the conversion.
 """
 function print_Pstring_as_Cstring(ps::Pstring)
     cp = CPstring(ps.length, pointer(ps.uchars))
