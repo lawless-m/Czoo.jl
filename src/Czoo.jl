@@ -201,6 +201,14 @@ function capture_c_stdout(c::Cint)
     captured
 end
 
+#== 
+for adding to the collection
+
+puts(s::Union{String,SubString{String}}) = ccall(:puts, Cint, (Ptr{Cchar},), s)
+jl_malloc(n::Integer) = ccall(:jl_malloc, Ptr{Cvoid}, (Csize_t,), n)
+
+==#
+
 #== These don't work yet / are untested
 
 """
