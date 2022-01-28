@@ -196,9 +196,9 @@ function capture_c_stdout(c::Cint)
         Base.Libc.flush_cstdio() # required or it sits in the buffer - even between invocations
     end
     seekstart(io)
-    c = "Captured: $(String(read(io)))"
-    println(c)
-    c
+    captured = "Captured: $(String(read(io)))"
+    println(captured)
+    captured
 end
 
 #== These don't work yet / are untested
