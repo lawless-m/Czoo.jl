@@ -51,5 +51,9 @@ print_Pstring_as_Cstring
 ```
 
 ```@docs
-capture_c_stdout
+capture_c_stdout_to_file
+```
+
+```@docs
+capture_c_stdout_to_IOBuffer
 ```

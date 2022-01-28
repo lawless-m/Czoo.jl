@@ -16,5 +16,6 @@ using Test
         @test print_list_int(Cint[1,2,3]) == 24
         @test print_Pstring_as_Cstring(Pstring("hai")) == 43
     end
-    @test capture_c_stdout(Cint('A')) == "Captured: A"
+    @test capture_c_stdout_to_file(Cint('F')) == "Captured: F"
+    @test capture_c_stdout_to_IOBuffer(Cint('B')) == "Captured: B"
 end

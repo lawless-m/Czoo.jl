@@ -3,7 +3,7 @@ module Czoo
 const LIB="src/libczoo"
 
 export free_ptr, add, concat, cons, CPstring, Pstring, pstring, ptr_pstring, CLinkedPstring, LinkedPstring, linked_pstrings
-export print_list_int, print_Pstruct, Pstruct, print_Pstring_as_Cstring, capture_c_stdout
+export print_list_int, print_Pstruct, Pstruct, print_Pstring_as_Cstring, capture_c_stdout_to_file, capture_c_stdout_to_IOBuffer
 
 """
     free_ptr(ptr; free=true)  
@@ -186,20 +186,54 @@ function print_Pstring_as_Cstring(ps::Pstring)
 end
 
 """
-    capture_c_stdout()
-Redirect stdout of the C program to a file and print it in Julia. Unfortunately IOBuffer() cannot be used, it requires an actual file.
+    capture_c_stdout_to_file()
+Redirect stdout of the C program to a file and print it in Julia. 
 """
-function capture_c_stdout(c::Cint)
+function capture_c_stdout_to_file(c::Cint)
     (path, io) = mktemp() # Julia will delete this on exit
+    prev_stdout = stdout
     redirect_stdout(io) do
         ccall(:putchar, Cint, (Cint,), c)
         Base.Libc.flush_cstdio() # required or it sits in the buffer - even between invocations
     end
     seekstart(io)
+    redirect_stdout(prev_stdout)
     captured = "Captured: $(String(read(io)))"
     println(captured)
     captured
 end
+
+"""
+    capture_c_stdout_to_IOBuffer(c::Cint)
+Call a C function and capture its stdout into an IOBuffer
+Thanks to Carsten Bauer https://github.com/carstenbauer for this one
+"""
+function capture_c_stdout_to_IOBuffer(c::Cint)
+
+    function call()
+        ccall(:putchar, Cint, (Cint,), c)
+        Base.Libc.flush_cstdio() # required or it sits in the buffer - even between invocations
+        flush(stdout) # also needed 
+    end
+
+    io = IOBuffer()
+    prev_stdout = stdout
+    rd, = redirect_stdout() 
+    task = @async write(io, rd)
+    try 
+        call()
+    finally
+        close(rd)
+        redirect_stdout(prev_stdout)
+        wait(task)
+    end
+
+    seekstart(io)
+    captured = "Captured: $(String(read(io)))"
+    println(captured)
+    captured
+end
+
 
 #== 
 for adding to the collection
