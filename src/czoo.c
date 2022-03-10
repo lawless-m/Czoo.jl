@@ -103,6 +103,16 @@ print_Pstring(const Pstring p) {
     return i;
 }
 
+int
+fes_new(FES* handle) {
+    int i;
+    printf("C: fes_new\n");
+
+    *handle = (FES *)calloc(1, 1);
+
+}
+
+
 /*
 
 void

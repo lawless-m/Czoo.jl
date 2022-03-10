@@ -31,3 +31,9 @@ print_list_int(const int* ints, int nints);
 
 extern int
 print_Pstring(const Pstring p);
+
+typedef void* FES;
+extern int 
+fes_new(FES* handle);
+
+
